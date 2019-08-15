@@ -51,7 +51,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
         </div>
       </div>
     </div>`;
-  }
+  }   
 
   private _getMockListData(): Promise<ISPLists> {
     return MockHttpClient.get()
