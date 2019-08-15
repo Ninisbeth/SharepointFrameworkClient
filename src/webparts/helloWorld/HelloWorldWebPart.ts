@@ -16,6 +16,11 @@ import {
   SPHttpClient,
   SPHttpClientResponse   
 } from '@microsoft/sp-http';
+import {
+  Environment,
+  EnvironmentType
+} from '@microsoft/sp-core-library';
+
 import { string } from 'prop-types';
 
 export interface IHelloWorldWebPartProps {
@@ -36,6 +41,37 @@ export interface ISPList {
 }
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorldWebPartProps> {
+
+  private _renderListAsync(): void {
+    // Local environment
+    if (Environment.type === EnvironmentType.Local) {
+      this._getMockListData().then((response) => {
+        this._renderList(response.value);
+      });
+    }
+    else if (Environment.type == EnvironmentType.SharePoint || 
+              Environment.type == EnvironmentType.ClassicSharePoint) {
+      this._getListData()
+        .then((response) => {
+          this._renderList(response.value);
+        });
+    }
+  }
+
+  private _renderList(items: ISPList[]): void {
+    let html: string = '';
+    items.forEach((item: ISPList) => {
+      html += `
+    <ul class="${styles.list}">
+      <li class="${styles.listItem}">
+        <span class="ms-font-l">${item.Title}</span>
+      </li>
+    </ul>`;
+    });
+  
+    const listContainer: Element = this.domElement.querySelector('#spListContainer');
+    listContainer.innerHTML = html;
+  }
 
   public render(): void {
     this.domElement.innerHTML = `
