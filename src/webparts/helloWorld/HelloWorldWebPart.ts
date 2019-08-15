@@ -87,10 +87,13 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
             <a href="https://aka.ms/spfx" class="${ styles.button }">
               <span class="${ styles.label }">Learn more</span>
             </a>
-          </div> 
+          </div>
         </div>
+        <div id="spListContainer" />
       </div>
     </div>`;
+
+    this._renderListAsync();
   }
   
   private _getListData(): Promise<ISPLists> {
