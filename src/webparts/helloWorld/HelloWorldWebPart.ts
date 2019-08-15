@@ -12,6 +12,10 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import styles from './HelloWorldWebPart.module.scss';
 import * as strings from 'HelloWorldWebPartStrings';
 import MockHttpClient from './MockHttpClient';
+import {
+  SPHttpClient,
+  SPHttpClientResponse   
+} from '@microsoft/sp-http';
 import { string } from 'prop-types';
 
 export interface IHelloWorldWebPartProps {
@@ -51,7 +55,14 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
         </div>
       </div>
     </div>`;
-  }   
+  }
+  
+  private _getListData(): Promise<ISPLists> {
+    return this.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl + `/_api/web/lists?$filter=Hidden eq false`, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      });
+  }
 
   private _getMockListData(): Promise<ISPLists> {
     return MockHttpClient.get()
