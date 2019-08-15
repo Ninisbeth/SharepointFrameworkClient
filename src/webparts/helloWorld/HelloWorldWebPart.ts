@@ -62,7 +62,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       .then((response: SPHttpClientResponse) => {
         return response.json();
       });
-  }
+  }  
 
   private _getMockListData(): Promise<ISPLists> {
     return MockHttpClient.get()
